@@ -13,24 +13,35 @@ namespace POE
     {
         private List<ArrayList> totalIngredient = new List<ArrayList>();
         private ArrayList singleIngredient;
-
+        
         public Ingredients()
         {
-            Console.WriteLine("Enter the number of ingredients.");
-            int numIngredients = Convert.ToInt32(Console.ReadLine());
-            setIngredients(numIngredients);
+            Boolean ingredientNoEntered = false;
+            while (!ingredientNoEntered)
+            {
+                Console.WriteLine("Enter the number of ingredients.");
+                String placeHolder = Console.ReadLine();
+                int numIngredients = 0;
+                if (!isEmpty(placeHolder))
+                    if(checkFloat(placeHolder,true))
+                        numIngredients = Convert.ToInt32(placeHolder);
+
+                setIngredients(numIngredients);
+            }
+            
         }
         public void setIngredients(int numIngredients)
         {
             for (int k = 0; k < numIngredients; k++)
             {
-                String name = "", unitOfMeasurement = "", quantity = "";
+                String name = "", unitOfMeasurement = "",q = "";
+                double quantity = 0.0;
                 singleIngredient = new ArrayList();
-                Console.WriteLine("Ingredient No." + (k + 1));
+                Console.WriteLine("Ingredient No." + (k+1));
 
-                confermName(name);
-                confermUnit(unitOfMeasurement);
-                confermQuantity(quantity, unitOfMeasurement);
+                name = confermName(name);
+                unitOfMeasurement = confermUnit(unitOfMeasurement);
+                quantity = confermQuantity(q,unitOfMeasurement);
 
                 singleIngredient.Add(name);
                 singleIngredient.Add(unitOfMeasurement);
@@ -51,7 +62,7 @@ namespace POE
             while (!conferm)
             {
                 Console.Write("Ingredient name : ");
-                name = Console.ReadLine().Trim();
+                name = Console.ReadLine();
 
                 if (isEmpty(name))
                 {
@@ -73,11 +84,17 @@ namespace POE
                 Console.Write("Amount of " + unit + " : ");
                 quantity = Console.ReadLine();
 
-                if (checkFloat(quantity))
+                if (isEmpty(quantity))
                 {
-                    conferm = true;
-                    q = Convert.ToDouble(quantity);
+                    conferm = false;
+                    Console.WriteLine("The quantity has not been entered");
                 }
+                else
+                if (checkFloat(quantity,false))
+                {
+                    conferm= true;
+                    q = Convert.ToDouble(quantity);
+                } 
             }
             return q;
         }
@@ -103,27 +120,37 @@ namespace POE
 
         private Boolean isEmpty(String s)
         {
-            if (s == null && s == "")
+            
+            if (s.Trim() == null || s.Trim() == "")
                 return true;
             else
                 return false;
         }
 
-        private Boolean checkFloat(String d)
+        private Boolean checkFloat(String d,Boolean wholeNo)
         {
+            var value =0.0;
+            
             try
             {
-                double value = Convert.ToDouble(d);
+                if (wholeNo)
+                    value = Convert.ToInt32(d);
+                else
+                    value = Convert.ToDouble(d);
+
                 if (value > 0)
                     return true;
                 else
                     Console.WriteLine("The value needs to ba a positive number");
-            }
-            catch (Exception e)
+            }catch(System.FormatException)
             {
-                Console.WriteLine("Input needs to be a number");
+                Console.WriteLine("Input needs to be a whole number");
             }
-
+            catch(Exception e)
+            { 
+                Console.WriteLine("Input needs to be a number"); 
+            }
+            
             return false;
         }
 
