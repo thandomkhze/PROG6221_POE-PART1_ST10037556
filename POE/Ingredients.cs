@@ -11,22 +11,27 @@ namespace POE
 {
     public class Ingredients : Checks
     {
-        private List<ArrayList> totalIngredient = new List<ArrayList>();
+        private ArrayList[] totalIngredient;
         private ArrayList singleIngredient;
 
         public Ingredients()
         {
+            int numIngredients = 0;
             Boolean ingredientNoEntered = false;
             while (!ingredientNoEntered)
             {
                 Console.WriteLine("Enter the number of ingredients.");
                 String placeHolder = Console.ReadLine();
-                int numIngredients = 0;
+
                 if (!isEmpty(placeHolder))
                     if (checkFloat(placeHolder, true))
+                    {
                         numIngredients = Convert.ToInt32(placeHolder);
-                setIngredients(numIngredients);
+                        ingredientNoEntered = true;
+                    }
             }
+            totalIngredient = new ArrayList[numIngredients];
+            setIngredients(numIngredients);
 
         }
         public void setIngredients(int numIngredients)
@@ -45,12 +50,12 @@ namespace POE
                 singleIngredient.Add(name);
                 singleIngredient.Add(unitOfMeasurement);
                 singleIngredient.Add(quantity);
-                totalIngredient.Add(singleIngredient);
+                totalIngredient[k] = singleIngredient;
             }
 
         }
 
-        public List<ArrayList> getIngredients()
+        public ArrayList[] getIngredients()
         {
             return totalIngredient;
         }
