@@ -8,7 +8,7 @@ namespace POE
 {
     abstract public class Checks
     {
-        public Boolean isEmpty(String s)
+        protected Boolean isEmpty(String s)
         {
 
             if (s.Trim() == null || s.Trim() == "")
@@ -17,7 +17,7 @@ namespace POE
                 return false;
         }
 
-        public Boolean checkFloat(String d, Boolean wholeNo)
+        protected Boolean checkFloat(String d, Boolean wholeNo)
         {
             var value = 0.0;
 
