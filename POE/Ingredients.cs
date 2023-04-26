@@ -9,11 +9,11 @@ using System.Xml.Linq;
 
 namespace POE
 {
-    class Ingredients
+    public class Ingredients : Checks
     {
         private List<ArrayList> totalIngredient = new List<ArrayList>();
         private ArrayList singleIngredient;
-        
+
         public Ingredients()
         {
             Boolean ingredientNoEntered = false;
@@ -23,25 +23,24 @@ namespace POE
                 String placeHolder = Console.ReadLine();
                 int numIngredients = 0;
                 if (!isEmpty(placeHolder))
-                    if(checkFloat(placeHolder,true))
+                    if (checkFloat(placeHolder, true))
                         numIngredients = Convert.ToInt32(placeHolder);
-
                 setIngredients(numIngredients);
             }
-            
+
         }
         public void setIngredients(int numIngredients)
         {
             for (int k = 0; k < numIngredients; k++)
             {
-                String name = "", unitOfMeasurement = "",q = "";
+                String name = "", unitOfMeasurement = "", q = "";
                 double quantity = 0.0;
                 singleIngredient = new ArrayList();
-                Console.WriteLine("Ingredient No." + (k+1));
+                Console.WriteLine("Ingredient No." + (k + 1));
 
                 name = confermName(name);
                 unitOfMeasurement = confermUnit(unitOfMeasurement);
-                quantity = confermQuantity(q,unitOfMeasurement);
+                quantity = confermQuantity(q, unitOfMeasurement);
 
                 singleIngredient.Add(name);
                 singleIngredient.Add(unitOfMeasurement);
@@ -72,6 +71,9 @@ namespace POE
                 else
                     conferm = true;
             }
+
+            String firstLetter = name.Substring(0, 1).ToUpper();
+            name = firstLetter + name.Substring(1, name.Length - 1);
             return name;
         }
 
@@ -90,11 +92,11 @@ namespace POE
                     Console.WriteLine("The quantity has not been entered");
                 }
                 else
-                if (checkFloat(quantity,false))
+                if (checkFloat(quantity, false))
                 {
-                    conferm= true;
+                    conferm = true;
                     q = Convert.ToDouble(quantity);
-                } 
+                }
             }
             return q;
         }
@@ -117,42 +119,5 @@ namespace POE
             }
             return unit;
         }
-
-        private Boolean isEmpty(String s)
-        {
-            
-            if (s.Trim() == null || s.Trim() == "")
-                return true;
-            else
-                return false;
-        }
-
-        private Boolean checkFloat(String d,Boolean wholeNo)
-        {
-            var value =0.0;
-            
-            try
-            {
-                if (wholeNo)
-                    value = Convert.ToInt32(d);
-                else
-                    value = Convert.ToDouble(d);
-
-                if (value > 0)
-                    return true;
-                else
-                    Console.WriteLine("The value needs to ba a positive number");
-            }catch(System.FormatException)
-            {
-                Console.WriteLine("Input needs to be a whole number");
-            }
-            catch(Exception e)
-            { 
-                Console.WriteLine("Input needs to be a number"); 
-            }
-            
-            return false;
-        }
-
     }
 }
