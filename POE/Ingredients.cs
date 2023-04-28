@@ -32,7 +32,7 @@ namespace POE
             }
             totalIngredient = new ArrayList[numIngredients];
             setIngredients(numIngredients);
-
+            Console.Write("\n");
         }
         public void setIngredients(int numIngredients)
         {
@@ -48,8 +48,9 @@ namespace POE
                 quantity = confermQuantity(q, unitOfMeasurement);
 
                 singleIngredient.Add(name);
-                singleIngredient.Add(unitOfMeasurement);
                 singleIngredient.Add(quantity);
+                singleIngredient.Add(unitOfMeasurement);
+
                 totalIngredient[k] = singleIngredient;
             }
 
@@ -88,7 +89,7 @@ namespace POE
             double q = 0.0;
             while (!conferm)
             {
-                Console.Write("Amount of " + unit + " : ");
+                Console.Write("Number of " + unit + "s : ");
                 quantity = Console.ReadLine();
 
                 if (isEmpty(quantity))

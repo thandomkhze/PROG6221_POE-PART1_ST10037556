@@ -29,6 +29,7 @@ namespace POE
             }
             totalSteps = new String[numSteps];
             setSteps(numSteps);
+            Console.Write("\n");
         }
 
         private void setSteps(int numSteps)
