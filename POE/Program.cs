@@ -7,7 +7,7 @@ public class Program
     private Steps steps;
 
     private ArrayList[] totalIngridients;
-
+    private ArrayList[] originalQuantity;
 
     private String[] totalStep;
     public static void Main(String[] args)
@@ -37,10 +37,11 @@ public class Program
                     collectAndDisplay();
                     break;
                 case 2:
+                    totalIngridients = originalQuantity;
                     display(scale(totalIngridients), totalStep);
                     break;
                 case 3:
-                    display(totalIngridients, totalStep);
+                    display(originalQuantity, totalStep);
                     break;
                 case 4:
                     done = true;
@@ -53,13 +54,14 @@ public class Program
     {
         Console.Clear();
         ingredients = new Ingredients();
+        originalQuantity = ingredients.getIngredients();
         totalIngridients = ingredients.getIngredients();
-        //originalQuantity = ingredients.getIngredients();
+        
 
         steps = new Steps();
         totalStep = steps.getSteps();
 
-        display(totalIngridients, totalStep);
+        display(originalQuantity, totalStep);
     }
 
     private void display(ArrayList[] ingredients, String[] Steps)
