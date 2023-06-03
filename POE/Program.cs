@@ -55,7 +55,7 @@ public class Program
         Console.Clear();
         ingredients = new Ingredients();
         originalQuantity = ingredients.getIngredients();
-        totalIngridients = ingredients.getIngredients();
+        totalIpngridients = ingredients.getIngredients();
         
 
         steps = new Steps();
