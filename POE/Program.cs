@@ -3,13 +3,7 @@ using System.Collections;
 
 public class Program
 {
-    private Ingredients ingredients;
-    private Steps steps;
-
-    private ArrayList[] totalIngridients;
-    private ArrayList[] originalQuantity;
-
-    private String[] totalStep;
+    private double prevMuliply = 1;
     public static void Main(String[] args)
     {
         new Program().runApp();
@@ -17,8 +11,15 @@ public class Program
 
     private void runApp()
     {
-        collectAndDisplay();
-        Boolean done = false;
+        Ingredients totalIngridients = new Ingredients();
+        ArrayList[] original = totalIngridients.getIngredients();
+        ArrayList[] ingridient = original;
+        String[] totalStep = new Steps().getSteps();
+
+        display(ingridient, totalStep);
+
+
+        bool done = false;
         while (!done)
         {
             int choice = 0;
@@ -34,43 +35,41 @@ public class Program
             switch (choice)
             {
                 case 1:
-                    collectAndDisplay();
+                    Console.Clear();
+                    totalIngridients = new Ingredients();
+                    ingridient = totalIngridients.getIngredients();
+                    totalStep = new Steps().getSteps();
+                    display(ingridient, totalStep);
                     break;
+
                 case 2:
-                    totalIngridients = originalQuantity;
-                    display(scale(totalIngridients), totalStep);
+                    display(scale(ingridient), totalStep);
                     break;
+
                 case 3:
-                    display(originalQuantity, totalStep);
+                    ingridient = totalIngridients.getIngredients();
+                    for (int k = 0; k < ingridient.Count(); k++)
+                        ingridient[k][1] = (double)ingridient[k][1] / prevMuliply;
+                    display(ingridient, totalStep);
+                    prevMuliply = 1;
                     break;
+
                 case 4:
                     done = true;
                     break;
             }
         }
     }
-    //method for collecting and displaying the ingredients and steps with the aid of a method called display().
-    private void collectAndDisplay()
+
+    private void display(ArrayList[] displayedIngredients, String[] Steps)
     {
         Console.Clear();
-        ingredients = new Ingredients();
-        originalQuantity = ingredients.getIngredients();
-        totalIpngridients = ingredients.getIngredients();
-        
-
-        steps = new Steps();
-        totalStep = steps.getSteps();
-
-        display(originalQuantity, totalStep);
-    }
-
-    private void display(ArrayList[] ingredients, String[] Steps)
-    {
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("=========================================================================================");
         Console.WriteLine("Ingredients:");
-        for (int k = 0; k < ingredients.Count(); k++)
+        for (int k = 0; k < displayedIngredients.Count(); k++)
         {
-            Console.WriteLine("\t * {0} {1}/s of {2} ", ingredients[k][1], ingredients[k][2], ingredients[k][0]);
+            Console.WriteLine("\t * {0} {1}/s of {2} ", displayedIngredients[k][1], displayedIngredients[k][2], displayedIngredients[k][0]);
         }
         Console.WriteLine("\nSteps:");
         for (int j = 0; j < Steps.Count(); j++)
@@ -78,32 +77,42 @@ public class Program
             Console.WriteLine("\tStep {0}:\n\t{1}\n", j + 1, Steps[j]);
         }
         Console.WriteLine("=========================================================================================\n");
-
+        Console.ForegroundColor = ConsoleColor.White;
     }
     //method for scaling the quantities(with the aid of the scaleConversion method.)
     private ArrayList[] scale(ArrayList[] arrIngredient)
     {
         Console.WriteLine("Select scale :\n\t1) 0.5\n\t2) 2\n\t3) 3");
         int option = Convert.ToInt32(Console.ReadLine());
+        double prev = prevMuliply;
 
         switch (option)
         {
-            case 1: arrIngredient = scaleConversion(0.5, arrIngredient); break;
-            case 2: arrIngredient = scaleConversion(2, arrIngredient); break;
-            case 3: arrIngredient = scaleConversion(3, arrIngredient); break;
+            case 1:
+                arrIngredient = scaleConversion(prev, 0.5, arrIngredient);
+                prevMuliply = 0.5;
+                break;
+            case 2:
+                arrIngredient = scaleConversion(prev, 2, arrIngredient);
+                prevMuliply = 2;
+                break;
+            case 3:
+                arrIngredient = scaleConversion(prev, 3, arrIngredient);
+                prevMuliply = 3;
+                break;
         }
         return arrIngredient;
     }
-    private static ArrayList[] scaleConversion(double scale, ArrayList[] arrIngredient)
+
+    private static ArrayList[] scaleConversion(double prev, double scale, ArrayList[] arrIngredient)
     {
-        ArrayList[] ChangedQuantity = new ArrayList[arrIngredient.Count()];
+        for (int k = 0; k < arrIngredient.Count(); k++)
+            arrIngredient[k][1] = (double)arrIngredient[k][1] / prev;
 
-        ChangedQuantity = arrIngredient;
-
-        for (int k = 0; k < ChangedQuantity.Count(); k++)
-            ChangedQuantity[k][1] = (double)ChangedQuantity[k][1] * scale;
+        for (int k = 0; k < arrIngredient.Count(); k++)
+            arrIngredient[k][1] = (double)arrIngredient[k][1] * scale;
         Console.WriteLine("Scaled by " + scale);
 
-        return ChangedQuantity;
+        return arrIngredient;
     }
 }

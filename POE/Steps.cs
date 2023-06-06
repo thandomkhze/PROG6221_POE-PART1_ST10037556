@@ -20,8 +20,8 @@ namespace POE
                 Console.WriteLine("Enter the number of steps.");
                 String placeHolder = Console.ReadLine();
 
-                if (!isEmpty(placeHolder))
-                    if (checkFloat(placeHolder, true))
+                if (!IsEmpty(placeHolder))
+                    if (CheckNum(placeHolder, true))
                     {
                         numSteps = Convert.ToInt32(placeHolder);
                         stepNoEntered = true;
@@ -45,7 +45,7 @@ namespace POE
                     Console.WriteLine("Step no.{0} description :", k + 1);
                     description = Console.ReadLine();
 
-                    if (isEmpty(description))
+                    if (IsEmpty(description))
                     {
                         conferm = false;
                         Console.WriteLine("A description has not been entered");
