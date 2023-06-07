@@ -77,7 +77,9 @@ namespace POE
                 if (IsEmpty(name))
                 {
                     conferm = false;
-                    Console.WriteLine("The name has not been entered");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("\nThe name has not been entered\n");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
                 else
                     conferm = true;
@@ -98,18 +100,24 @@ namespace POE
                 Console.Write("Number of " + unit + "s : ");
                 quantity = Console.ReadLine();
 
-                if (CheckNum(quantity, false))
+                if (IsEmpty(quantity))
+                {
+                    conferm = false;
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("\nThe quantity has not been entered\n");
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                else
+                    if (CheckNum(quantity, false))
                 {
                     conferm = true;
                     q = Convert.ToDouble(quantity);
                 }
                 else
-                    Console.WriteLine("Invalid input");
-
-                if (IsEmpty(quantity))
                 {
-                    conferm = false;
-                    Console.WriteLine("The quantity has not been entered");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("\nInvalid input\n");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             return q;
@@ -126,7 +134,9 @@ namespace POE
                 if (IsEmpty(unit))
                 {
                     conferm = false;
-                    Console.WriteLine("The unit of messurement has not been entered");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("\nThe unit of messurement has not been entered\n");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
                 else
                     conferm = true;
@@ -139,17 +149,21 @@ namespace POE
             Boolean conferm = false;
             while (!conferm)
             {
-                Console.WriteLine("Select the food group which matches the ingredient\n" +
-                    "1) Starchy\n" +
-                    "2) Fruit / Vegrtable\n" +
-                    "3) Dry beans / Peas / Lentils / Soya" +
-                    "4) Milk / Dairy product" +
-                    "5) Fats / Oil" +
-                    "6) Water");
+                Console.WriteLine("\nSelect the food group which matches the ingredient\n" +
+                    "\t1) Starchy\n" +
+                    "\t2) Fruit / Vegrtable\n" +
+                    "\t3) Dry beans / Peas / Lentils / Soya\n" +
+                    "\t4) Milk / Dairy product\n" +
+                    "\t5) Fats / Oil\n" +
+                    "\t6) Water");
                 group = Console.ReadLine();
 
                 if (IsEmpty(group))
-                    Console.WriteLine("You have not selected an option.");
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("\nYou have not selected an option\n");
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
                 else
                 if (CheckNum(group, true))
                 {
@@ -192,7 +206,7 @@ namespace POE
             String cal;
             while (!conferm)
             {
-                Console.Write("Calories per ingredient : ");
+                Console.Write("\nWhat is the total calories for the ingredient : ");
                 cal = Console.ReadLine();
 
                 if (CheckNum(cal, false))
@@ -201,7 +215,11 @@ namespace POE
                     calories = Convert.ToDouble(cal);
                 }
                 else
-                    Console.WriteLine("Input needs to be a float value");
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("\nInput needs to be a float value\n");
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
             }
             return calories;
         }

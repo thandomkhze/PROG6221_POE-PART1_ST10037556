@@ -48,7 +48,9 @@ namespace POE
                     if (IsEmpty(description))
                     {
                         conferm = false;
-                        Console.WriteLine("A description has not been entered");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("\nA description has not been entered\n");
+                        Console.ForegroundColor = ConsoleColor.White;
                     }
                     else
                         conferm = true;

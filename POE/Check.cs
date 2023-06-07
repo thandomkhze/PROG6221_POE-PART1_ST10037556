@@ -31,17 +31,29 @@ namespace POE
                 if (value > 0)
                     return true;
                 else
-                    Console.WriteLine("The value needs to ba a positive number");
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("\nThe value needs to ba a positive number\n");
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+
             }
             catch (System.FormatException)
             {
-                Console.WriteLine("Input needs to be a whole number");
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("\nInput needs to be a whole number\n");
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
             }
             catch (Exception e)
             {
-                Console.WriteLine("Input needs to be a number");
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("\nInput needs to be a number\n");
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
             }
-
             return false;
         }
     }
