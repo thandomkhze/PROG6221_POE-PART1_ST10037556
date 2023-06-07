@@ -153,9 +153,10 @@ namespace POE
                     "\t1) Starchy\n" +
                     "\t2) Fruit / Vegrtable\n" +
                     "\t3) Dry beans / Peas / Lentils / Soya\n" +
-                    "\t4) Milk / Dairy product\n" +
-                    "\t5) Fats / Oil\n" +
-                    "\t6) Water");
+                    "\t4) Chicken / Fish / Meat / Eggs\n" +
+                    "\t5) Milk / Dairy product\n" +
+                    "\t6) Fats / Oil\n" +
+                    "\t7) Water");
                 group = Console.ReadLine();
 
                 if (IsEmpty(group))
@@ -182,14 +183,18 @@ namespace POE
                             conferm = true;
                             break;
                         case 4:
-                            group = "Milk / Dairy product";
+                            group = "Chicken / Fish / Meat / Eggs";
                             conferm = true;
                             break;
                         case 5:
-                            group = "Fats / Oil";
+                            group = "Milk / Dairy product";
                             conferm = true;
                             break;
                         case 6:
+                            group = "Fats / Oil";
+                            conferm = true;
+                            break;
+                        case 7:
                             group = "Water";
                             conferm = true;
                             break;

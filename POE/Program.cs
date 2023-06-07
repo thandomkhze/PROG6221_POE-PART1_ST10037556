@@ -1,9 +1,10 @@
 ﻿using POE;
 using System.Collections;
 
-public class Program
+public class Program : Checks
 {
-    private double prevMuliply = 1;
+    private List<String> recipeNames;
+    private List<Recipe> allRecipes = new List<Recipe>();
     public static void Main(String[] args)
     {
         new Program().runApp();
@@ -11,108 +12,108 @@ public class Program
 
     private void runApp()
     {
-        Ingredients totalIngridients = new Ingredients();
-        ArrayList[] original = totalIngridients.getIngredients();
-        ArrayList[] ingridient = original;
-        String[] totalStep = new Steps().getSteps();
+        Recipe recipe;
+        recipeNames = new List<String>();
+        bool exit = false;
 
-        display(ingridient, totalStep);
-
-
-        bool done = false;
-        while (!done)
+        while (!exit)
         {
-            int choice = 0;
-
-            Console.WriteLine("What do you wish to do?\n" +
-                "1) Enter a new recipe.\n" +
-                "2) Change the scale of the recipe.\n" +
-                "3) Reset quantities to the original values.\n" +
+            Console.WriteLine("Please select one of the following\n" +
+                "1)Add a recipe\n" +
+                "2)Display a list of all recipes\n" +
+                "3)Display a full recipe\n" +
                 "4)Exit");
 
-            choice = Convert.ToInt32(Console.ReadLine());
-            // case statement which will choose a method that matches the selected option.
-            switch (choice)
+            int choice = 0;
+            String c = Console.ReadLine().Trim();
+            if (c.Equals("1") || c.Equals("2") || c.Equals("3") || c.Equals("4"))
             {
-                case 1:
-                    Console.Clear();
-                    totalIngridients = new Ingredients();
-                    ingridient = totalIngridients.getIngredients();
-                    totalStep = new Steps().getSteps();
-                    display(ingridient, totalStep);
-                    break;
+                choice = Convert.ToInt32(c);
+                switch (choice)
+                {
+                    case 1:
+                        Console.Clear();
+                        Console.WriteLine("Enter the recipe name");
+                        String name = Console.ReadLine();
 
-                case 2:
-                    display(scale(ingridient), totalStep);
-                    break;
+                        if (!IsEmpty(name))
+                        {
+                            recipe = new Recipe();
+                            if (recipe.Save() == true)
+                            {
+                                String firstLetter = name.Substring(0, 1).ToUpper();
+                                name = firstLetter + name.Substring(1, name.Length - 1);
+                                recipeNames.Add(name);
+                                allRecipes.Add(recipe);
+                            }
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("\nYou have not entered a recipe name\n");
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+                        break;
 
-                case 3:
-                    ingridient = totalIngridients.getIngredients();
-                    for (int k = 0; k < ingridient.Count(); k++)
-                        ingridient[k][1] = (double)ingridient[k][1] / prevMuliply;
-                    display(ingridient, totalStep);
-                    prevMuliply = 1;
-                    break;
+                    case 2:
+                        if (recipeNames.Count > 0)
+                        {
+                            Console.Clear();
+                            recipeNames.Sort();
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("=========================================================================================");
+                            Console.WriteLine("Recipe List:");
+                            foreach (String k in recipeNames)
+                                Console.WriteLine(" * " + k);
+                            Console.WriteLine("=========================================================================================\n");
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("\nNo recipes available\n");
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+                        break;
 
-                case 4:
-                    done = true;
-                    break;
+                    case 3:
+                        if (recipeNames.Count > 0)
+                        {
+                            Console.Clear();
+                            String input = "";
+                            Console.WriteLine("Select the recipe you wish to view");
+                            for (int x = 0; x < recipeNames.Count; x++)
+                                Console.WriteLine("{0} ) {1}", (x + 1), recipeNames[x]);
+                            input = Console.ReadLine();
+
+                            if (CheckNum(input, true))
+                            {
+                                int select = Convert.ToInt32(input);
+                                if (select <= recipeNames.Count)
+                                {
+                                    Recipe rec = allRecipes[select - 1];
+                                    display(rec.getIngredients(), rec.getSteps());
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("\nNo recipes available\n");
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+                        break;
+
+                    case 4: exit = true; break;
+                }
+            }
+            else
+            {
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("\nInvalid input\n");
+                Console.ForegroundColor = ConsoleColor.White;
             }
         }
-    }
-
-    private void display(ArrayList[] displayedIngredients, String[] Steps)
-    {
-        Console.Clear();
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("=========================================================================================");
-        Console.WriteLine("Ingredients:");
-        for (int k = 0; k < displayedIngredients.Count(); k++)
-        {
-            Console.WriteLine("\t * {0} {1}/s of {2} ", displayedIngredients[k][1], displayedIngredients[k][2], displayedIngredients[k][0]);
-        }
-        Console.WriteLine("\nSteps:");
-        for (int j = 0; j < Steps.Count(); j++)
-        {
-            Console.WriteLine("\tStep {0}:\n\t{1}\n", j + 1, Steps[j]);
-        }
-        Console.WriteLine("=========================================================================================\n");
-        Console.ForegroundColor = ConsoleColor.White;
-    }
-    //method for scaling the quantities(with the aid of the scaleConversion method.)
-    private ArrayList[] scale(ArrayList[] arrIngredient)
-    {
-        Console.WriteLine("Select scale :\n\t1) 0.5\n\t2) 2\n\t3) 3");
-        int option = Convert.ToInt32(Console.ReadLine());
-        double prev = prevMuliply;
-
-        switch (option)
-        {
-            case 1:
-                arrIngredient = scaleConversion(prev, 0.5, arrIngredient);
-                prevMuliply = 0.5;
-                break;
-            case 2:
-                arrIngredient = scaleConversion(prev, 2, arrIngredient);
-                prevMuliply = 2;
-                break;
-            case 3:
-                arrIngredient = scaleConversion(prev, 3, arrIngredient);
-                prevMuliply = 3;
-                break;
-        }
-        return arrIngredient;
-    }
-
-    private static ArrayList[] scaleConversion(double prev, double scale, ArrayList[] arrIngredient)
-    {
-        for (int k = 0; k < arrIngredient.Count(); k++)
-            arrIngredient[k][1] = (double)arrIngredient[k][1] / prev;
-
-        for (int k = 0; k < arrIngredient.Count(); k++)
-            arrIngredient[k][1] = (double)arrIngredient[k][1] * scale;
-        Console.WriteLine("Scaled by " + scale);
-
-        return arrIngredient;
     }
 }

@@ -10,15 +10,13 @@ namespace POE
 {
     public class Recipe : Checks
     {
-        private ArrayList arrFullRecipe;
+        private ArrayList arrFullRecipe = new ArrayList();
         private double prevMuliply = 1;
         private bool save = false;
+        private ArrayList[] ingredient = new Ingredients().getIngredients();
+        private String[] totalStep = new Steps().getSteps();
         public Recipe()
         {
-            Ingredients totalIngredients = new Ingredients();
-            ArrayList[] ingredient = totalIngredients.getIngredients();
-            String[] totalStep = new Steps().getSteps();
-
             display(ingredient, totalStep);
             bool exit = false;
 
@@ -52,9 +50,10 @@ namespace POE
                     case 3:
                         String reply = "";
 
-                        Console.WriteLine("Do you which to save the recipe? (y/n)");
-
+                        Console.WriteLine("\nDo you which to save the recipe? (y/n)");
                         reply = Console.ReadLine();
+                        Console.Clear();
+
                         if (reply.Equals("y") || reply.Equals("Y"))
                         {
                             save = true;
@@ -71,8 +70,8 @@ namespace POE
                         else
                         {
                             Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("invalid input\n" +
-                                "require input(y/n)");
+                            Console.WriteLine("\ninvalid input\n" +
+                                "require input(y/n)\n");
                             Console.ForegroundColor = ConsoleColor.White;
                             exit = false;
                         }
@@ -80,38 +79,6 @@ namespace POE
                         break;
                 }
             }
-        }
-
-        public void display(ArrayList[] displayedIngredients, String[] Steps)
-        {
-            Console.Clear();
-            double totalCalories = 0;
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("=========================================================================================");
-            Console.WriteLine("Ingredients:");
-            for (int k = 0; k < displayedIngredients.Count(); k++)
-            {
-                Console.WriteLine("\t * {0} {1}/s of {2}.\t\tCalories : {3}\t\tFood group : {4} ",
-                    displayedIngredients[k][1], displayedIngredients[k][2], displayedIngredients[k][0],
-                    displayedIngredients[k][4], displayedIngredients[k][3]);
-
-                totalCalories += (double)displayedIngredients[k][4];
-            }
-
-            if (totalCalories > 300)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Calories have exceeded 300 :(  ({0})", totalCalories);
-                Console.ForegroundColor = ConsoleColor.Green;
-            }
-
-            Console.WriteLine("\nSteps:");
-            for (int j = 0; j < Steps.Count(); j++)
-            {
-                Console.WriteLine("\tStep {0}:\n\t{1}\n", j + 1, Steps[j]);
-            }
-            Console.WriteLine("=========================================================================================\n");
-            Console.ForegroundColor = ConsoleColor.White;
         }
 
         private ArrayList[] scale(ArrayList[] arrIngredient)
@@ -158,14 +125,24 @@ namespace POE
 
         }
 
-        public ArrayList getFullRecipe()
+        /*public ArrayList getFullRecipe()
         {
             return arrFullRecipe;
+        }*/
+
+        public ArrayList[] getIngredients()
+        {
+            return ingredient;
+        }
+        public String[] getSteps()
+        {
+            return totalStep;
         }
 
         public bool Save()
         {
             return save;
         }
+
     }
 }
